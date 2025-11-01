@@ -1,0 +1,45 @@
+# Core Framework
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+python-multipart
+
+# LLM & Agent Frameworks
+openai==1.10.0
+anthropic==0.18.0
+langchain==0.1.4
+langchain-openai==0.0.5
+langchain-anthropic==0.1.1
+langgraph==0.0.20
+langchain-community==0.0.17
+
+# Vector Database
+qdrant-client==1.7.3
+sentence-transformers==2.3.1
+
+# Web Search
+tavily-python==0.3.0
+requests==2.31.0
+
+# DSPy for Feedback Optimization
+dspy-ai==2.4.0
+
+# Utilities
+python-dotenv==1.0.0
+numpy
+pandas
+tiktoken>=0.5.1,<0.6.0
+
+# Database
+sqlalchemy==2.0.25
+alembic==1.13.1
+
+# Security & Validation
+presidio-analyzer==2.2.33
+presidio-anonymizer==2.2.33
+
+# Testing
+pytest==7.4.4
+pytest-asyncio==0.23.3
+httpx==0.26.0

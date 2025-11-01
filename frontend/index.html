@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Routing Agent</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .main-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .input-section {
+            margin-bottom: 20px;
+        }
+        
+        .input-section label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .input-section textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-section textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .examples {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .examples h4 {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .example-btn {
+            display: inline-block;
+            margin: 5px;
+            padding: 8px 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .example-btn:hover {
+            background: #5568d3;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result-section {
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .result-section.visible {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .result-badge {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .badge-kb {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .badge-web {
+            background: #2196f3;
+            color: white;
+        }
+        
+        .result-content {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .result-content h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .solution {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            color: #555;
+        }
+        
+        .steps {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+        
+        .steps li {
+            counter-increment: step-counter;
+            margin-bottom: 15px;
+            padding-left: 40px;
+            position: relative;
+        }
+        
+        .steps li:before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+        }
+        
+        .loading:after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+        
+        .error {
+            background: #f44336;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .metrics {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .metric {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧮 Math Routing Agent</h1>
+            <p>AI-powered mathematical problem solver with intelligent routing</p>
+        </div>
+        
+        <div class="main-card">
+            <div class="input-section">
+                <label for="question">Ask your math question:</label>
+                <textarea id="question" placeholder="Example: Solve the equation x² + 5x + 6 = 0"></textarea>
+            </div>
+            
+            <div class="examples">
+                <h4>📝 Quick Examples:</h4>
+                <button class="example-btn" onclick="setExample('Solve the quadratic equation: x² + 5x + 6 = 0')">Quadratic Equation</button>
+                <button class="example-btn" onclick="setExample('Find the derivative of f(x) = x³ + 2x² - 5x + 1')">Derivative</button>
+                <button class="example-btn" onclick="setExample('Calculate the area of a circle with radius 7 cm')">Circle Area</button>
+                <button class="example-btn" onclick="setExample('Explain the Collatz conjecture')">Collatz Conjecture</button>
+            </div>
+            
+            <button class="submit-btn" onclick="submitQuestion()">🚀 Solve Problem</button>
+            
+            <div id="loading" class="loading" style="display: none;">
+                Thinking
+            </div>
+            
+            <div id="error" class="error" style="display: none;"></div>
+            
+            <div id="result" class="result-section">
+                <div class="result-header">
+                    <div>
+                        <strong>Routing Decision:</strong>
+                        <span id="source" class="result-badge"></span>
+                    </div>
+                </div>
+                
+                <div class="metrics">
+                    <div class="metric">
+                        <div class="metric-value" id="confidence">-</div>
+                        <div class="metric-label">Confidence</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="time">-</div>
+                        <div class="metric-label">Processing Time</div>
+                    </div>
+                </div>
+                
+                <div class="result-content">
+                    <h3>📊 Solution:</h3>
+                    <div class="solution" id="solution"></div>
+                </div>
+                
+                <div id="steps-container" style="display: none;">
+                    <div class="result-content">
+                        <h3>📋 Step-by-Step:</h3>
+                        <ol class="steps" id="steps"></ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_URL = 'http://localhost:8000/api/v1';
+        
+        function setExample(text) {
+            document.getElementById('question').value = text;
+        }
+        
+        async function submitQuestion() {
+            const question = document.getElementById('question').value.trim();
+            
+            if (!question) {
+                alert('Please enter a question!');
+                return;
+            }
+            
+            // Hide previous results and errors
+            document.getElementById('result').classList.remove('visible');
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+            
+            // Disable submit button
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Processing...';
+            
+            try {
+                const response = await fetch(`${API_URL}/question`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ question })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displayResult(data);
+                } else {
+                    showError(data.detail || 'An error occurred');
+                }
+            } catch (error) {
+                showError('Cannot connect to the backend server. Make sure it\'s running on port 8000.');
+                console.error('Error:', error);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🚀 Solve Problem';
+            }
+        }
+        
+        function displayResult(data) {
+            // Show result section
+            document.getElementById('result').classList.add('visible');
+            
+            // Source badge
+            const sourceBadge = document.getElementById('source');
+            sourceBadge.textContent = data.source === 'knowledge_base' ? '📚 Knowledge Base' : '🌐 Web Search';
+            sourceBadge.className = 'result-badge ' + (data.source === 'knowledge_base' ? 'badge-kb' : 'badge-web');
+            
+            // Metrics
+            document.getElementById('confidence').textContent = (data.confidence * 100).toFixed(0) + '%';
+            document.getElementById('time').textContent = data.processing_time.toFixed(2) + 's';
+            
+            // Solution
+            document.getElementById('solution').textContent = data.solution || 'No solution provided';
+            
+            // Steps
+            if (data.steps && data.steps.length > 0) {
+                const stepsContainer = document.getElementById('steps-container');
+                const stepsList = document.getElementById('steps');
+                stepsList.innerHTML = '';
+                
+                data.steps.forEach(step => {
+                    const li = document.createElement('li');
+                    li.textContent = step;
+                    stepsList.appendChild(li);
+                });
+                
+                stepsContainer.style.display = 'block';
+            } else {
+                document.getElementById('steps-container').style.display = 'none';
+            }
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = '❌ Error: ' + message;
+            errorDiv.style.display = 'block';
+        }
+        
+        // Allow Enter key to submit (with Shift+Enter for new line)
+        document.getElementById('question').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                submitQuestion();
+            }
+        });
+    </script>
+</body>
+</html>
