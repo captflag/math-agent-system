@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Math Routing Agent - Agentic RAG System
 
 A comprehensive mathematical professor AI system that provides step-by-step solutions with intelligent routing between knowledge base retrieval and web search, enhanced with guardrails and human-in-the-loop feedback.
@@ -263,3 +264,6 @@ MIT License
 ## 👥 Contributors
 
 Built for the Math Agent Assignment - Agentic RAG System
+=======
+# math-agent-system
+>>>>>>> 12f8e4e4fe09a496f3241f138cc31e82de9fa624
