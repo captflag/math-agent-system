@@ -1,0 +1,7 @@
+**/__pycache__
+**/*.pyc
+backend/.env
+backend/data/feedback.sqlite3
+backend/data/plots
+backend/benchmarks/results
+.git

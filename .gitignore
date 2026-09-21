@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Local secrets & state
+backend/.env
+backend/data/feedback.sqlite3
+backend/data/calibration.json
+backend/data/plots/
+backend/benchmarks/results/
