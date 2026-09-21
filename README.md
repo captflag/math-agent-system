@@ -87,8 +87,16 @@ cp .env.example .env       # put your ANTHROPIC_API_KEY here (or use `ant auth l
 python -m uvicorn app.main:app --port 8000
 ```
 
-Open http://localhost:8000 — the frontend (KaTeX-rendered steps, live agent log,
-star-rating feedback) is served by the backend. API docs at `/api/docs`.
+Open http://localhost:8000 — the frontend (React + Tailwind + shadcn/ui, bundled to
+a single file in `frontend/index.html`) is served by the backend. API docs at `/api/docs`.
+
+To change the UI, edit `frontend-src/` and rebuild:
+
+```bash
+cd frontend-src
+pnpm install
+pnpm exec vite build   # then inline dist into ../frontend/index.html (see frontend-src/README)
+```
 
 Or with Docker: `docker build -t math-agent-v2 . && docker run -p 8000:8000 -e ANTHROPIC_API_KEY=sk-... math-agent-v2`
 

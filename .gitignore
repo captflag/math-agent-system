@@ -9,3 +9,7 @@ backend/data/feedback.sqlite3
 backend/data/calibration.json
 backend/data/plots/
 backend/benchmarks/results/
+
+# Frontend build artifacts
+frontend-src/node_modules/
+frontend-src/dist/
