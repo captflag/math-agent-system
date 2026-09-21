@@ -1,0 +1,450 @@
+[
+ {
+  "id": "alg-001",
+  "topic": "algebra",
+  "question": "Solve the quadratic equation x^2 + 5x + 6 = 0",
+  "solution": "Factor: x^2 + 5x + 6 = (x + 2)(x + 3). Set each factor to zero: x + 2 = 0 gives x = -2; x + 3 = 0 gives x = -3.",
+  "answer": "x = -2 or x = -3"
+ },
+ {
+  "id": "alg-002",
+  "topic": "algebra",
+  "question": "Solve the linear equation 3x - 7 = 11",
+  "solution": "Add 7 to both sides: 3x = 18. Divide by 3: x = 6.",
+  "answer": "x = 6"
+ },
+ {
+  "id": "alg-003",
+  "topic": "algebra",
+  "question": "Solve the system 2x + y = 7 and x - y = 2",
+  "solution": "Add the equations: 3x = 9, so x = 3. Substitute: y = 7 - 2(3) = 1.",
+  "answer": "x = 3, y = 1"
+ },
+ {
+  "id": "alg-004",
+  "topic": "algebra",
+  "question": "Factor x^2 - 9",
+  "solution": "Difference of squares: x^2 - 9 = (x - 3)(x + 3).",
+  "answer": "(x - 3)(x + 3)"
+ },
+ {
+  "id": "alg-005",
+  "topic": "algebra",
+  "question": "Use the quadratic formula to solve 2x^2 - 4x - 3 = 0",
+  "solution": "x = (4 ± sqrt(16 + 24)) / 4 = (4 ± sqrt(40)) / 4 = (2 ± sqrt(10)) / 2.",
+  "answer": "x = (2 + sqrt(10))/2 or x = (2 - sqrt(10))/2"
+ },
+ {
+  "id": "cal-001",
+  "topic": "calculus",
+  "question": "Find the derivative of f(x) = x^3 + 2x^2 - 5x + 1",
+  "solution": "Apply the power rule term by term: d/dx x^3 = 3x^2, d/dx 2x^2 = 4x, d/dx (-5x) = -5, d/dx 1 = 0.",
+  "answer": "f'(x) = 3x^2 + 4x - 5"
+ },
+ {
+  "id": "cal-002",
+  "topic": "calculus",
+  "question": "Compute the integral of x^2 dx",
+  "solution": "Reverse power rule: integral of x^n is x^(n+1)/(n+1). So integral of x^2 dx = x^3/3 + C.",
+  "answer": "x^3/3 + C"
+ },
+ {
+  "id": "cal-003",
+  "topic": "calculus",
+  "question": "Evaluate the limit of sin(x)/x as x approaches 0",
+  "solution": "This is the standard limit; by the squeeze theorem or Taylor expansion sin(x) = x - x^3/6 + ..., so sin(x)/x approaches 1.",
+  "answer": "1"
+ },
+ {
+  "id": "cal-004",
+  "topic": "calculus",
+  "question": "Find the derivative of e^(2x) using the chain rule",
+  "solution": "Outer function e^u with u = 2x. d/dx e^(2x) = e^(2x) * 2.",
+  "answer": "2e^(2x)"
+ },
+ {
+  "id": "cal-005",
+  "topic": "calculus",
+  "question": "Evaluate the definite integral of 2x from 0 to 3",
+  "solution": "Antiderivative is x^2. Evaluate: 3^2 - 0^2 = 9.",
+  "answer": "9"
+ },
+ {
+  "id": "geo-001",
+  "topic": "geometry",
+  "question": "Calculate the area of a circle with radius 7 cm",
+  "solution": "Area = pi * r^2 = pi * 49 ≈ 153.938 cm^2.",
+  "answer": "49π ≈ 153.94 cm^2"
+ },
+ {
+  "id": "geo-002",
+  "topic": "geometry",
+  "question": "Find the hypotenuse of a right triangle with legs 3 and 4",
+  "solution": "Pythagorean theorem: c^2 = 3^2 + 4^2 = 25, so c = 5.",
+  "answer": "5"
+ },
+ {
+  "id": "geo-003",
+  "topic": "geometry",
+  "question": "Find the volume of a sphere with radius 3",
+  "solution": "V = (4/3) pi r^3 = (4/3) pi * 27 = 36 pi.",
+  "answer": "36π ≈ 113.10"
+ },
+ {
+  "id": "geo-004",
+  "topic": "geometry",
+  "question": "What is the sum of interior angles of a hexagon?",
+  "solution": "Sum = (n - 2) * 180 with n = 6: 4 * 180 = 720 degrees.",
+  "answer": "720°"
+ },
+ {
+  "id": "tri-001",
+  "topic": "trigonometry",
+  "question": "What is sin(30°)?",
+  "solution": "From the special right triangle 30-60-90, sin(30°) = 1/2.",
+  "answer": "1/2"
+ },
+ {
+  "id": "tri-002",
+  "topic": "trigonometry",
+  "question": "Prove the identity sin^2(x) + cos^2(x) = 1",
+  "solution": "On the unit circle a point is (cos x, sin x); its distance from origin is 1, so cos^2 x + sin^2 x = 1 by Pythagoras.",
+  "answer": "Follows from the unit circle and the Pythagorean theorem"
+ },
+ {
+  "id": "tri-003",
+  "topic": "trigonometry",
+  "question": "Solve sin(x) = 1/2 for x in [0, 2π]",
+  "solution": "sin is 1/2 at the reference angle π/6; solutions in the range are x = π/6 and x = 5π/6.",
+  "answer": "x = π/6 or x = 5π/6"
+ },
+ {
+  "id": "pro-001",
+  "topic": "probability",
+  "question": "What is the probability of rolling a sum of 7 with two dice?",
+  "solution": "Favorable outcomes: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1) = 6 of 36 total.",
+  "answer": "6/36 = 1/6"
+ },
+ {
+  "id": "pro-002",
+  "topic": "probability",
+  "question": "How many ways can 5 people be arranged in a row?",
+  "solution": "Permutations of 5 distinct items: 5! = 120.",
+  "answer": "120"
+ },
+ {
+  "id": "pro-003",
+  "topic": "probability",
+  "question": "How many ways to choose 3 items from 10?",
+  "solution": "Combination C(10,3) = 10! / (3! 7!) = 120.",
+  "answer": "120"
+ },
+ {
+  "id": "sta-001",
+  "topic": "statistics",
+  "question": "Find the mean and median of 2, 4, 4, 5, 10",
+  "solution": "Mean = (2+4+4+5+10)/5 = 25/5 = 5. Sorted middle value (3rd of 5) is 4.",
+  "answer": "mean = 5, median = 4"
+ },
+ {
+  "id": "sta-002",
+  "topic": "statistics",
+  "question": "Compute the variance of 1, 2, 3, 4, 5",
+  "solution": "Mean = 3. Squared deviations: 4, 1, 0, 1, 4; population variance = 10/5 = 2.",
+  "answer": "2 (population variance)"
+ },
+ {
+  "id": "num-001",
+  "topic": "number theory",
+  "question": "Find the GCD of 48 and 36",
+  "solution": "Euclid: gcd(48,36) = gcd(36,12) = gcd(12,0) = 12.",
+  "answer": "12"
+ },
+ {
+  "id": "num-002",
+  "topic": "number theory",
+  "question": "Is 97 a prime number?",
+  "solution": "Check divisibility by primes up to sqrt(97) ≈ 9.8: 2, 3, 5, 7 — none divide 97.",
+  "answer": "Yes, 97 is prime"
+ },
+ {
+  "id": "vec-001",
+  "topic": "vectors",
+  "question": "Find the angle between vectors a = i + j and b = i - j",
+  "solution": "a·b = 1 - 1 = 0. Since the dot product is zero, the vectors are perpendicular.",
+  "answer": "90° (π/2)"
+ },
+ {
+  "id": "vec-002",
+  "topic": "vectors",
+  "question": "Find a unit vector perpendicular to a = i + j + k and b = i + 2j + 3k",
+  "solution": "Cross product a×b = (1·3-1·2, 1·1-1·3, 1·2-1·1) = (1, -2, 1). Magnitude = sqrt(6). Unit vector = (1, -2, 1)/sqrt(6).",
+  "answer": "(i - 2j + k)/√6"
+ },
+ {
+  "id": "vec-003",
+  "topic": "vectors",
+  "question": "Find the projection of a = 2i + 3j + 2k on b = i + 2j + k",
+  "solution": "Projection = a·b/|b| = (2 + 6 + 2)/sqrt(6) = 10/sqrt(6) = 5·sqrt(6)/3.",
+  "answer": "10/√6 = 5√6/3"
+ },
+ {
+  "id": "3dg-001",
+  "topic": "3d geometry",
+  "question": "Find the distance of the point (2, 5, -3) from the plane x + 2y - 2z = 9",
+  "solution": "Distance = |2 + 10 + 6 - 9| / sqrt(1 + 4 + 4) = 9/3 = 3.",
+  "answer": "3"
+ },
+ {
+  "id": "3dg-002",
+  "topic": "3d geometry",
+  "question": "Find the angle between the lines with direction ratios (1, 1, 2) and (√3-1, -√3-1, 4)",
+  "solution": "cos θ = (a1a2 + b1b2 + c1c2)/(|a||b|). Numerator = (√3-1) - (√3+1) + 8 = 6. |a| = √6, |b| = √(4-2√3 + 4+2√3 + 16) = √24. cos θ = 6/(√6·√24) = 6/12 = 1/2.",
+  "answer": "60° (π/3)"
+ },
+ {
+  "id": "3dg-003",
+  "topic": "3d geometry",
+  "question": "Find the equation of the plane through (1, 0, 0), (0, 1, 0) and (0, 0, 1)",
+  "solution": "Intercept form with a = b = c = 1: x/1 + y/1 + z/1 = 1.",
+  "answer": "x + y + z = 1"
+ },
+ {
+  "id": "mat-001",
+  "topic": "matrices",
+  "question": "Find the determinant of [[1, 2], [3, 4]]",
+  "solution": "det = 1·4 - 2·3 = 4 - 6 = -2.",
+  "answer": "-2"
+ },
+ {
+  "id": "mat-002",
+  "topic": "matrices",
+  "question": "Find the inverse of [[2, 1], [1, 1]]",
+  "solution": "det = 2 - 1 = 1. Inverse = (1/det)·[[1, -1], [-1, 2]] = [[1, -1], [-1, 2]].",
+  "answer": "[[1, -1], [-1, 2]]"
+ },
+ {
+  "id": "mat-003",
+  "topic": "matrices",
+  "question": "If A is a 3x3 matrix with det(A) = 5, find det(2A)",
+  "solution": "det(kA) = k^n det(A) for an n×n matrix: det(2A) = 2^3 · 5 = 40.",
+  "answer": "40"
+ },
+ {
+  "id": "mat-004",
+  "topic": "matrices",
+  "question": "Find the eigenvalues of [[2, 0], [0, 3]]",
+  "solution": "For a diagonal matrix the eigenvalues are the diagonal entries.",
+  "answer": "2 and 3"
+ },
+ {
+  "id": "cpx-001",
+  "topic": "complex numbers",
+  "question": "Find the modulus and argument of z = 1 + i",
+  "solution": "|z| = sqrt(1 + 1) = sqrt(2). arg = atan(1/1) = π/4 (first quadrant).",
+  "answer": "|z| = √2, arg = π/4"
+ },
+ {
+  "id": "cpx-002",
+  "topic": "complex numbers",
+  "question": "Compute (1 + i)^8",
+  "solution": "1 + i = √2·e^(iπ/4). So (1+i)^8 = (√2)^8 · e^(i2π) = 16 · 1 = 16.",
+  "answer": "16"
+ },
+ {
+  "id": "cpx-003",
+  "topic": "complex numbers",
+  "question": "If ω is a non-real cube root of unity, find 1 + ω + ω²",
+  "solution": "Cube roots of unity satisfy x³ - 1 = (x-1)(x² + x + 1) = 0; non-real roots satisfy ω² + ω + 1 = 0.",
+  "answer": "0"
+ },
+ {
+  "id": "cpx-004",
+  "topic": "complex numbers",
+  "question": "Express (2 + 3i)/(1 - i) in the form a + bi",
+  "solution": "Multiply by conjugate: (2+3i)(1+i)/((1-i)(1+i)) = (2 + 2i + 3i - 3)/2 = (-1 + 5i)/2.",
+  "answer": "-1/2 + (5/2)i"
+ },
+ {
+  "id": "bin-001",
+  "topic": "binomial theorem",
+  "question": "Find the coefficient of x^5 in (1 + x)^10",
+  "solution": "Coefficient of x^k in (1+x)^n is C(n,k): C(10,5) = 252.",
+  "answer": "252"
+ },
+ {
+  "id": "bin-002",
+  "topic": "binomial theorem",
+  "question": "Find the term independent of x in (x + 1/x)^6",
+  "solution": "General term C(6,r) x^(6-r) x^(-r) = C(6,r) x^(6-2r). Independent when 6 - 2r = 0, r = 3: C(6,3) = 20.",
+  "answer": "20"
+ },
+ {
+  "id": "pnc-001",
+  "topic": "permutations",
+  "question": "How many 4-letter words can be formed from the letters of MATHS without repetition?",
+  "solution": "P(5,4) = 5·4·3·2 = 120.",
+  "answer": "120"
+ },
+ {
+  "id": "pnc-002",
+  "topic": "combinations",
+  "question": "In how many ways can a committee of 3 men and 2 women be chosen from 6 men and 5 women?",
+  "solution": "C(6,3)·C(5,2) = 20 · 10 = 200.",
+  "answer": "200"
+ },
+ {
+  "id": "seq-001",
+  "topic": "sequences",
+  "question": "Find the sum of the first 20 terms of the AP 3, 7, 11, ...",
+  "solution": "a = 3, d = 4. S = n/2 (2a + (n-1)d) = 10(6 + 76) = 820.",
+  "answer": "820"
+ },
+ {
+  "id": "seq-002",
+  "topic": "sequences",
+  "question": "Find the sum of the infinite GP 1 + 1/2 + 1/4 + ...",
+  "solution": "a = 1, r = 1/2 < 1. S = a/(1-r) = 1/(1/2) = 2.",
+  "answer": "2"
+ },
+ {
+  "id": "seq-003",
+  "topic": "sequences",
+  "question": "Find the sum 1² + 2² + ... + n² for n = 10",
+  "solution": "Sum = n(n+1)(2n+1)/6 = 10·11·21/6 = 385.",
+  "answer": "385"
+ },
+ {
+  "id": "con-001",
+  "topic": "conic sections",
+  "question": "Find the focus and directrix of the parabola y² = 8x",
+  "solution": "Compare with y² = 4ax: 4a = 8, a = 2. Focus (a, 0) = (2, 0); directrix x = -a.",
+  "answer": "Focus (2, 0), directrix x = -2"
+ },
+ {
+  "id": "con-002",
+  "topic": "conic sections",
+  "question": "Find the eccentricity of the ellipse x²/25 + y²/9 = 1",
+  "solution": "a² = 25, b² = 9. e = sqrt(1 - b²/a²) = sqrt(16/25) = 4/5.",
+  "answer": "4/5"
+ },
+ {
+  "id": "con-003",
+  "topic": "conic sections",
+  "question": "Find the eccentricity of the hyperbola x²/9 - y²/16 = 1",
+  "solution": "e = sqrt(1 + b²/a²) = sqrt(1 + 16/9) = 5/3.",
+  "answer": "5/3"
+ },
+ {
+  "id": "crd-001",
+  "topic": "coordinate geometry",
+  "question": "Find the equation of the circle with center (2, -1) and radius 3",
+  "solution": "(x - 2)² + (y + 1)² = 9.",
+  "answer": "(x-2)² + (y+1)² = 9"
+ },
+ {
+  "id": "crd-002",
+  "topic": "coordinate geometry",
+  "question": "Find the distance between the parallel lines 3x + 4y = 9 and 3x + 4y = 24",
+  "solution": "Distance = |24 - 9|/sqrt(9+16) = 15/5 = 3.",
+  "answer": "3"
+ },
+ {
+  "id": "cal-006",
+  "topic": "calculus",
+  "question": "Find the maximum value of f(x) = x(1-x) on [0, 1]",
+  "solution": "f'(x) = 1 - 2x = 0 at x = 1/2. f(1/2) = 1/4; f''<0 so it is a maximum.",
+  "answer": "1/4 at x = 1/2"
+ },
+ {
+  "id": "cal-007",
+  "topic": "calculus",
+  "question": "Evaluate the limit of (1 + 1/n)^n as n approaches infinity",
+  "solution": "This is the definition of e.",
+  "answer": "e ≈ 2.71828"
+ },
+ {
+  "id": "cal-008",
+  "topic": "calculus",
+  "question": "Evaluate the definite integral of sin(x) from 0 to π",
+  "solution": "Antiderivative -cos(x): (-cos π) - (-cos 0) = 1 + 1 = 2.",
+  "answer": "2"
+ },
+ {
+  "id": "cal-009",
+  "topic": "calculus",
+  "question": "Use the property ∫₀ᵃ f(x)dx = ∫₀ᵃ f(a-x)dx to evaluate ∫₀^(π/2) sin x/(sin x + cos x) dx",
+  "solution": "Let I = ∫ sin/(sin+cos). Substituting x → π/2 - x gives I = ∫ cos/(sin+cos). Adding: 2I = ∫₀^(π/2) 1 dx = π/2, so I = π/4.",
+  "answer": "π/4"
+ },
+ {
+  "id": "cal-010",
+  "topic": "calculus",
+  "question": "Find the equation of the tangent to y = x² at the point (1, 1)",
+  "solution": "dy/dx = 2x = 2 at x=1. Tangent: y - 1 = 2(x - 1), i.e. y = 2x - 1.",
+  "answer": "y = 2x - 1"
+ },
+ {
+  "id": "cal-011",
+  "topic": "calculus",
+  "question": "Find the area bounded by y = x² and y = x",
+  "solution": "Intersections at x = 0, 1. Area = ∫₀¹ (x - x²) dx = 1/2 - 1/3 = 1/6.",
+  "answer": "1/6"
+ },
+ {
+  "id": "dif-001",
+  "topic": "differential equations",
+  "question": "Solve the differential equation dy/dx = y",
+  "solution": "Separate: dy/y = dx. Integrate: ln|y| = x + c, so y = Ce^x.",
+  "answer": "y = Ce^x"
+ },
+ {
+  "id": "dif-002",
+  "topic": "differential equations",
+  "question": "Find the order and degree of (d²y/dx²)³ + (dy/dx)² = 0",
+  "solution": "Highest derivative is second order; its power is 3, so degree 3.",
+  "answer": "order 2, degree 3"
+ },
+ {
+  "id": "pro-004",
+  "topic": "probability",
+  "question": "A bag has 3 red and 5 black balls; two are drawn without replacement. Find P(both red)",
+  "solution": "P = (3/8)(2/7) = 6/56 = 3/28.",
+  "answer": "3/28"
+ },
+ {
+  "id": "pro-005",
+  "topic": "probability",
+  "question": "Given P(A)=0.5, P(B)=0.4, P(A∩B)=0.2, find P(A|B)",
+  "solution": "P(A|B) = P(A∩B)/P(B) = 0.2/0.4 = 0.5.",
+  "answer": "0.5"
+ },
+ {
+  "id": "trg-004",
+  "topic": "trigonometry",
+  "question": "Find the principal value of tan⁻¹(√3)",
+  "solution": "tan(π/3) = √3 and π/3 lies in the principal range (-π/2, π/2).",
+  "answer": "π/3"
+ },
+ {
+  "id": "trg-005",
+  "topic": "trigonometry",
+  "question": "If sin θ + cos θ = √2, find θ in [0, π/2]",
+  "solution": "√2 sin(θ + π/4) = √2 gives sin(θ + π/4) = 1, θ + π/4 = π/2, θ = π/4.",
+  "answer": "θ = π/4"
+ },
+ {
+  "id": "fun-001",
+  "topic": "functions",
+  "question": "Find the domain of f(x) = sqrt(x - 2) + log(5 - x)",
+  "solution": "Need x - 2 >= 0 and 5 - x > 0: 2 <= x < 5.",
+  "answer": "[2, 5)"
+ },
+ {
+  "id": "qde-001",
+  "topic": "algebra",
+  "question": "For what values of k does x² + kx + 4 = 0 have real and equal roots?",
+  "solution": "Discriminant k² - 16 = 0 gives k = ±4.",
+  "answer": "k = 4 or k = -4"
+ }
+]
