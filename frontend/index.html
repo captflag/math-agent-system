@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Agent v2</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<style>
+  :root {
+    --bg: #f4f5fb; --card: #ffffff; --ink: #1c2030; --muted: #6b7186;
+    --accent: #4f5dd4; --accent-ink: #ffffff; --ok: #1d8a4e; --warn: #b3690e;
+    --err: #c23434; --line: #e3e5f0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14161f; --card: #1e2130; --ink: #e8eaf2; --muted: #9aa0b5;
+      --accent: #7c88f0; --accent-ink: #12141c; --ok: #4ec98a; --warn: #e0a34c;
+      --err: #e57070; --line: #303448;
+    }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg);
+         color: var(--ink); min-height: 100vh; padding: 24px 16px; }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 1.6em; margin-bottom: 4px; }
+  .sub { color: var(--muted); margin-bottom: 20px; }
+  .card { background: var(--card); border: 1px solid var(--line);
+          border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  textarea { width: 100%; min-height: 90px; padding: 12px; font: inherit;
+             border: 1px solid var(--line); border-radius: 8px; resize: vertical;
+             background: var(--bg); color: var(--ink); }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  button { padding: 10px 18px; font: inherit; font-weight: 600; border: none;
+           border-radius: 8px; background: var(--accent); color: var(--accent-ink);
+           cursor: pointer; }
+  button:disabled { opacity: 0.5; cursor: default; }
+  .chip { font-size: 0.85em; padding: 4px 10px; border: 1px solid var(--line);
+          border-radius: 999px; color: var(--muted); cursor: pointer; background: none; font-weight: 400; }
+  .log { font-size: 0.88em; color: var(--muted); }
+  .log div { padding: 3px 0; }
+  .badge { display: inline-block; font-size: 0.78em; font-weight: 600;
+           padding: 3px 10px; border-radius: 999px; margin-right: 6px; }
+  .badge.ok { background: color-mix(in srgb, var(--ok) 15%, transparent); color: var(--ok); }
+  .badge.warn { background: color-mix(in srgb, var(--warn) 15%, transparent); color: var(--warn); }
+  .badge.info { background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent); }
+  .step { border-left: 3px solid var(--accent); padding: 8px 14px; margin: 10px 0; }
+  .step .desc { font-weight: 600; }
+  .step .formula { font-family: Consolas, monospace; margin: 4px 0; color: var(--accent); }
+  .final { font-size: 1.1em; font-weight: 700; margin-top: 14px; padding: 12px;
+           background: color-mix(in srgb, var(--ok) 10%, transparent); border-radius: 8px; }
+  .error { color: var(--err); font-weight: 600; }
+  .stars button { background: none; border: none; font-size: 1.4em; cursor: pointer; padding: 2px; }
+  .meta { font-size: 0.82em; color: var(--muted); margin-top: 10px; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📐 Math Agent v2</h1>
+  <p class="sub">Claude Opus 5 · local knowledge base · SymPy-verified answers</p>
+
+  <div class="card">
+    <textarea id="question" placeholder="Ask a math question, e.g. Solve x² + 5x + 6 = 0"></textarea>
+    <div class="row">
+      <button id="solveBtn">Solve</button>
+      <button class="chip" id="attachBtn">📎 attach figure</button>
+      <input type="file" id="imageInput" accept="image/png,image/jpeg,image/webp,image/gif" class="hidden">
+      <label class="chip" style="display:flex;align-items:center;gap:5px">
+        <input type="checkbox" id="advMode"> JEE Advanced mode (deeper reasoning)
+      </label>
+      <label class="chip" style="display:flex;align-items:center;gap:5px">
+        <input type="checkbox" id="diagMode"> Diagnose my attempt (find my mistake)
+      </label>
+      <button class="chip" data-q="Solve the quadratic equation x^2 + 5x + 6 = 0">quadratic</button>
+      <button class="chip" data-q="Find the derivative of f(x) = x^3 + 2x^2 - 5x + 1">derivative</button>
+      <button class="chip" data-q="Find the eigenvalues of the matrix [[2, 1], [1, 2]]">matrix</button>
+    </div>
+    <div class="row hidden" id="imageRow">
+      <img id="imagePreview" style="max-height:90px;border-radius:8px;border:1px solid var(--line)">
+      <button class="chip" id="removeImage">✕ remove figure</button>
+    </div>
+  </div>
+
+  <div class="card hidden" id="progress"><div class="log" id="log"></div></div>
+
+  <div class="card hidden" id="result">
+    <div id="badges"></div>
+    <div id="diagBanner" class="hidden" style="margin:10px 0;padding:10px 14px;border-radius:8px;
+         background:color-mix(in srgb, var(--warn) 12%, transparent);color:var(--warn);font-weight:600"></div>
+    <div id="steps"></div>
+    <div id="plotArea"></div>
+    <div class="final" id="finalAnswer"></div>
+    <div class="meta" id="meta"></div>
+    <div class="row" id="feedbackRow">
+      <span>Rate this solution:</span>
+      <span class="stars" id="stars"></span>
+      <span id="fbMsg" class="log"></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <strong>🎯 Practice generator</strong> — a fresh problem with a machine-verified answer key
+    <div class="row">
+      <input id="pTopic" placeholder="topic, e.g. definite integrals" style="flex:1;min-width:180px;
+        padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit">
+      <select id="pDiff" style="padding:9px;border:1px solid var(--line);border-radius:8px;
+        background:var(--bg);color:var(--ink);font:inherit">
+        <option>JEE Main</option><option>JEE Advanced</option>
+      </select>
+      <button id="pBtn">Generate</button>
+    </div>
+    <div id="pOut" style="margin-top:12px"></div>
+  </div>
+
+  <div class="card">
+    <strong>🧑‍🏫 Socratic tutor</strong> — guided hints, never the whole answer
+    <div id="tLog" style="margin:12px 0;max-height:320px;overflow-y:auto"></div>
+    <div class="row">
+      <input id="tInput" placeholder="Tell the tutor what you're working on..." style="flex:1;min-width:200px;
+        padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit">
+      <button id="tBtn">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let current = null;
+let attachedImage = null;  // {base64, mediaType}
+
+$('attachBtn').addEventListener('click', () => $('imageInput').click());
+$('imageInput').addEventListener('change', () => {
+  const file = $('imageInput').files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    attachedImage = {
+      base64: reader.result.split(',')[1],
+      mediaType: file.type,
+    };
+    $('imagePreview').src = reader.result;
+    $('imageRow').classList.remove('hidden');
+  };
+  reader.readAsDataURL(file);
+});
+$('removeImage').addEventListener('click', () => {
+  attachedImage = null;
+  $('imageInput').value = '';
+  $('imageRow').classList.add('hidden');
+});
+
+document.querySelectorAll('.chip').forEach(b =>
+  b.addEventListener('click', () => { $('question').value = b.dataset.q; }));
+
+function logLine(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  $('log').appendChild(div);
+}
+
+function tex(str) {
+  const span = document.createElement('span');
+  try { katex.render(str, span, { throwOnError: false }); }
+  catch { span.textContent = str; }
+  return span;
+}
+
+async function solve() {
+  const q = $('question').value.trim();
+  if (!q) return;
+  $('solveBtn').disabled = true;
+  $('progress').classList.remove('hidden');
+  $('result').classList.add('hidden');
+  $('log').innerHTML = '';
+  logLine('▶ Sending question...');
+
+  try {
+    const payload = { question: q };
+    if (attachedImage) {
+      payload.image_base64 = attachedImage.base64;
+      payload.image_media_type = attachedImage.mediaType;
+    }
+    if ($('advMode').checked) payload.effort = 'xhigh';
+    if ($('diagMode').checked) payload.mode = 'diagnose';
+    const resp = await fetch('/api/v1/solve', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      logLine('✖ ' + (err.detail?.detail || err.detail || resp.statusText));
+      return;
+    }
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      let idx;
+      while ((idx = buf.indexOf('\n\n')) >= 0) {
+        const chunk = buf.slice(0, idx).trim();
+        buf = buf.slice(idx + 2);
+        if (chunk.startsWith('data: ')) handleEvent(JSON.parse(chunk.slice(6)));
+      }
+    }
+  } catch (e) {
+    logLine('✖ Network error: ' + e.message);
+  } finally {
+    $('solveBtn').disabled = false;
+  }
+}
+
+function handleEvent(ev) {
+  if (ev.type === 'status') logLine('… ' + ev.message);
+  else if (ev.type === 'tool_call')
+    logLine('🔧 ' + ev.tool + (ev.input ? ' ' + JSON.stringify(ev.input) : ''));
+  else if (ev.type === 'tool_result')
+    logLine((ev.is_error ? '⚠ ' : '✓ ') + ev.tool + ': ' + ev.preview);
+  else if (ev.type === 'error') logLine('✖ ' + ev.message);
+  else if (ev.type === 'solution') render(ev.data);
+}
+
+function addBadge(parent, cls, text) {
+  const b = document.createElement('span');
+  b.className = 'badge ' + cls;
+  b.textContent = text;
+  parent.appendChild(b);
+}
+
+function render(data) {
+  current = data;
+  $('result').classList.remove('hidden');
+  const badges = $('badges');
+  badges.innerHTML = '';
+  addBadge(badges, 'info', 'source: ' + data.source);
+  addBadge(badges, data.sympy_verified ? 'ok' : 'warn',
+    data.sympy_verified ? '✓ SymPy-verified' : 'not machine-verified');
+  if (data.steps_checked > 0)
+    addBadge(badges, 'ok', `${data.steps_checked} steps spot-checked`);
+  if (data.corrected) addBadge(badges, 'warn', 'self-corrected');
+  if (data.confidence != null)
+    addBadge(badges, 'info', `~${Math.round(data.confidence * 100)}% historical accuracy`);
+
+  const diag = $('diagBanner');
+  const d = data.solution.diagnosis;
+  if (d && d.error_step != null) {
+    diag.textContent = `⚠ Error found in your step ${d.error_step}: ${d.misconception || ''}`;
+    diag.classList.remove('hidden');
+  } else if (d && d.misconception) {
+    diag.textContent = '✓ ' + d.misconception;
+    diag.classList.remove('hidden');
+  } else diag.classList.add('hidden');
+
+  const plotArea = $('plotArea');
+  plotArea.innerHTML = '';
+  for (const url of data.plots || []) {
+    const img = document.createElement('img');
+    img.src = url;
+    img.style.cssText = 'max-width:100%;border-radius:8px;margin:8px 0;border:1px solid var(--line)';
+    plotArea.appendChild(img);
+  }
+
+  const steps = $('steps');
+  steps.innerHTML = '';
+  for (const s of data.solution.steps) {
+    const div = document.createElement('div');
+    div.className = 'step';
+    const desc = document.createElement('div');
+    desc.className = 'desc';
+    desc.textContent = s.step_number + '. ' + s.description;
+    div.appendChild(desc);
+    if (s.formula) {
+      const f = document.createElement('div');
+      f.className = 'formula';
+      f.appendChild(tex(s.formula));
+      div.appendChild(f);
+    }
+    const exp = document.createElement('div');
+    exp.textContent = s.explanation;
+    div.appendChild(exp);
+    steps.appendChild(div);
+  }
+
+  $('finalAnswer').textContent = '✅ ' + data.solution.final_answer;
+  $('meta').textContent =
+    `verification: ${data.solution.verification.method} · tools: ${data.tools_used.join(', ') || 'none'}` +
+    ` · ${data.turns} turns · ${data.processing_time}s · ${data.model} · ~$${data.est_cost.toFixed(3)}` +
+    (data.solution.references.length ? ' · refs: ' + data.solution.references.join(', ') : '');
+
+  const stars = $('stars');
+  stars.innerHTML = '';
+  $('fbMsg').textContent = '';
+  for (let i = 1; i <= 5; i++) {
+    const b = document.createElement('button');
+    b.textContent = '☆';
+    b.addEventListener('click', () => sendFeedback(i));
+    stars.appendChild(b);
+  }
+}
+
+async function sendFeedback(rating) {
+  if (!current) return;
+  const stars = $('stars').children;
+  for (let i = 0; i < 5; i++) stars[i].textContent = i < rating ? '★' : '☆';
+  try {
+    await fetch('/api/v1/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: current.question,
+        final_answer: current.solution.final_answer,
+        accuracy: rating,
+        clarity: rating,
+      }),
+    });
+    $('fbMsg').textContent = 'Thanks — feedback recorded.';
+  } catch { $('fbMsg').textContent = 'Could not save feedback.'; }
+}
+
+$('solveBtn').addEventListener('click', solve);
+$('question').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) solve();
+});
+
+// ---------- Shared SSE reader ----------
+async function readSSE(url, payload, onEvent) {
+  const resp = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.detail?.detail || err.detail || resp.statusText);
+  }
+  const reader = resp.body.getReader();
+  const decoder = new TextDecoder();
+  let buf = '';
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += decoder.decode(value, { stream: true });
+    let idx;
+    while ((idx = buf.indexOf('\n\n')) >= 0) {
+      const chunk = buf.slice(0, idx).trim();
+      buf = buf.slice(idx + 2);
+      if (chunk.startsWith('data: ')) onEvent(JSON.parse(chunk.slice(6)));
+    }
+  }
+}
+
+// ---------- Practice generator ----------
+$('pBtn').addEventListener('click', async () => {
+  const topic = $('pTopic').value.trim();
+  if (!topic) return;
+  $('pBtn').disabled = true;
+  const out = $('pOut');
+  out.textContent = 'Generating (this solves and verifies the problem first)...';
+  try {
+    await readSSE('/api/v1/practice', { topic, difficulty: $('pDiff').value }, ev => {
+      if (ev.type === 'status') out.textContent = ev.message;
+      else if (ev.type === 'error') out.textContent = '✖ ' + ev.message;
+      else if (ev.type === 'practice') {
+        const d = ev.data;
+        out.innerHTML = '';
+        const prob = document.createElement('div');
+        prob.style.cssText = 'padding:12px;border-left:3px solid var(--accent);margin-bottom:8px';
+        prob.textContent = d.problem;
+        out.appendChild(prob);
+        const badge = document.createElement('div');
+        badge.className = 'log';
+        badge.textContent = d.sympy_verified
+          ? '✓ answer key machine-verified with SymPy'
+          : '⚠ answer key not machine-verified';
+        out.appendChild(badge);
+        const det = document.createElement('details');
+        det.style.marginTop = '8px';
+        const sum = document.createElement('summary');
+        sum.textContent = 'Reveal answer & solution';
+        sum.style.cursor = 'pointer';
+        det.appendChild(sum);
+        const body = document.createElement('div');
+        for (const s of d.steps) {
+          const line = document.createElement('div');
+          line.className = 'step';
+          line.textContent = `${s.step_number}. ${s.description} — ${s.explanation}`;
+          body.appendChild(line);
+        }
+        const ans = document.createElement('div');
+        ans.className = 'final';
+        ans.textContent = '✅ ' + d.final_answer;
+        body.appendChild(ans);
+        det.appendChild(body);
+        out.appendChild(det);
+      }
+    });
+  } catch (e) { out.textContent = '✖ ' + e.message; }
+  finally { $('pBtn').disabled = false; }
+});
+
+// ---------- Socratic tutor ----------
+let tutorSession = null;
+
+function tutorLine(who, text) {
+  const div = document.createElement('div');
+  div.style.cssText = 'padding:8px 12px;border-radius:8px;margin:6px 0;' +
+    (who === 'you'
+      ? 'background:color-mix(in srgb, var(--accent) 12%, transparent);margin-left:15%'
+      : 'background:var(--bg);margin-right:15%');
+  div.textContent = (who === 'you' ? 'You: ' : 'Tutor: ') + text;
+  $('tLog').appendChild(div);
+  $('tLog').scrollTop = $('tLog').scrollHeight;
+  return div;
+}
+
+async function tutorSend() {
+  const msg = $('tInput').value.trim();
+  if (!msg) return;
+  $('tInput').value = '';
+  $('tBtn').disabled = true;
+  tutorLine('you', msg);
+  const pending = tutorLine('tutor', '...');
+  try {
+    await readSSE('/api/v1/tutor', { message: msg, session_id: tutorSession }, ev => {
+      if (ev.type === 'session') tutorSession = ev.session_id;
+      else if (ev.type === 'tool_call') pending.textContent = 'Tutor: (checking your math...)';
+      else if (ev.type === 'tutor_reply') pending.textContent = 'Tutor: ' + ev.text;
+      else if (ev.type === 'error') pending.textContent = 'Tutor: ✖ ' + ev.message;
+    });
+  } catch (e) { pending.textContent = 'Tutor: ✖ ' + e.message; }
+  finally { $('tBtn').disabled = false; }
+}
+
+$('tBtn').addEventListener('click', tutorSend);
+$('tInput').addEventListener('keydown', e => { if (e.key === 'Enter') tutorSend(); });
+</script>
+</body>
+</html>
